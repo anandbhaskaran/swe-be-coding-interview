@@ -1,5 +1,6 @@
 package com.getourguide.interview.controller;
 
+import com.getourguide.interview.dto.SupplierStatsDto;
 import com.getourguide.interview.service.StatisticsService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping("/stats/suppliers")
-    public ResponseEntity<List<Object[]>> supplierStats() {
+    public ResponseEntity<List<SupplierStatsDto>> supplierStats() {
         return ResponseEntity.ok(statisticsService.getSupplierStats());
     }
 }

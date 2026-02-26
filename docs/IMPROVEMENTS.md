@@ -184,7 +184,7 @@ private ActivityDto mapToDto(Activity activity) {
 
 ---
 
-### 6. Useless StatisticsRepository Query
+### 6. Useless StatisticsRepository Query - FIXED
 **File:** `src/main/java/com/getourguide/interview/repository/StatisticsRepository.java:11-16`
 
 **Problem:**
@@ -204,6 +204,16 @@ String SUPPLIER_STATS_QUERY = """
 - OR implement actual statistics (count activities per supplier, avg rating, etc.)
 
 **Effort:** 2 hours for real stats
+
+**FIXED:**
+- Created `SupplierStatsDto` with supplierId, supplierName, activityCount, averageRating
+- Replaced native SQL with JPQL using constructor expression for DTO projection
+- Query now uses `LEFT JOIN s.activities` and `GROUP BY` for aggregation
+- Returns activity count and average rating per supplier (actual statistics!)
+- Updated service to return `List<SupplierStatsDto>` instead of `List<Object[]>`
+- Updated controller to return typed DTOs
+- Added comprehensive unit tests (4 tests covering DTO mapping, aggregation, edge cases)
+- Query ordered by activity count DESC (most active suppliers first)
 
 ---
 
