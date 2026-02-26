@@ -7,7 +7,7 @@ Analysis of 310 lines of production code reveals critical issues in architecture
 
 ## P0 - Critical Issues (Must Fix)
 
-### 1. Severe Performance Issues in ActivityService
+### 1. Severe Performance Issues in ActivityService - FIXED
 **File:** `src/main/java/com/getourguide/interview/service/ActivityService.java`
 
 **Problem:**
@@ -38,7 +38,7 @@ List<Activity> findByTitleContaining(String search);
 
 ---
 
-### 2. Broken Search Logic in SupplierController
+### 2. Broken Search Logic in SupplierController - FIXED
 **File:** `src/main/java/com/getourguide/interview/controller/SupplierController.java:24-33`
 
 **Problem:**
@@ -66,6 +66,13 @@ public ResponseEntity<List<Supplier>> suppliersSearch(@PathVariable String searc
 - Use database-level filtering
 
 **Effort:** 3 hours
+
+**FIXED:**
+- Created `SupplierRepository` with parameterized JPQL query (no SQL injection)
+- Created `SupplierService` following repository pattern
+- Refactored `SupplierController` to use service (removed EntityManager)
+- Search now returns ALL matches consistently
+- Comprehensive unit tests added
 
 ---
 
@@ -96,7 +103,7 @@ public ResponseEntity<List<Supplier>> suppliersSearch(@PathVariable String searc
 
 ## P1 - High Priority
 
-### 4. Architecture Violation: SupplierController Bypasses Repository Pattern
+### 4. Architecture Violation: SupplierController Bypasses Repository Pattern - FIXED
 **File:** `src/main/java/com/getourguide/interview/controller/SupplierController.java`
 
 **Problem:**
@@ -140,9 +147,11 @@ public class SupplierController {
 
 **Effort:** 4 hours
 
+**FIXED:** Resolved as part of Issue #2 fix
+
 ---
 
-### 5. Massive Code Duplication in ActivityService
+### 5. Massive Code Duplication in ActivityService - FIXED
 **File:** `src/main/java/com/getourguide/interview/service/ActivityService.java`
 
 **Problem:**
@@ -170,6 +179,8 @@ private ActivityDto mapToDto(Activity activity) {
 ```
 
 **Effort:** 1 hour
+
+**FIXED:** Resolved as part of Issue #1 fix - extracted `mapToDto()` method
 
 ---
 
