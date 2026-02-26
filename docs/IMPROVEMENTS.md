@@ -244,7 +244,7 @@ String SUPPLIER_STATS_QUERY = """
 
 ---
 
-### 8. Generic Error Handler Masks Real Issues
+### 8. Generic Error Handler Masks Real Issues - FIXED
 **File:** `src/main/java/com/getourguide/interview/error/ErrorHandler.java`
 
 **Problem:**
@@ -268,6 +268,19 @@ public ResponseEntity<String> handleException(Exception e) {
 - Structured error responses with useful messages
 
 **Effort:** 3 hours
+
+**FIXED:**
+- Created `ResourceNotFoundException` for 404 scenarios
+- Created `ErrorResponseDto` with structured error response (status, error, message, path)
+- Added specific handlers:
+  - `handleResourceNotFoundException` → 404 Not Found
+  - `handleIllegalArgumentException` → 400 Bad Request
+  - `handleException` → 500 Internal Server Error (fallback)
+- Updated ActivityService to throw ResourceNotFoundException
+- Each handler returns appropriate HTTP status code
+- Error responses include request path for debugging
+- Added comprehensive unit tests (5 tests)
+- Added integration test to verify actual HTTP responses
 
 ---
 

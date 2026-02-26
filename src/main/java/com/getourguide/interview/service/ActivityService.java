@@ -2,6 +2,7 @@ package com.getourguide.interview.service;
 
 import com.getourguide.interview.dto.ActivityDto;
 import com.getourguide.interview.entity.Activity;
+import com.getourguide.interview.exception.ResourceNotFoundException;
 import com.getourguide.interview.repository.ActivityRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ActivityService {
 
     public ActivityDto getActivities(Long activityId) {
         Activity activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new RuntimeException("Activity not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + activityId));
         return mapToDto(activity);
     }
 
