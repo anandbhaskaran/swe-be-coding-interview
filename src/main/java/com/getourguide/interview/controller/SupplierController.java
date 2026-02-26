@@ -2,15 +2,18 @@ package com.getourguide.interview.controller;
 
 import com.getourguide.interview.dto.SupplierDto;
 import com.getourguide.interview.service.SupplierService;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @AllArgsConstructor
+@Validated
 public class SupplierController {
     private final SupplierService supplierService;
 
@@ -20,7 +23,7 @@ public class SupplierController {
     }
 
     @GetMapping("/suppliers/search/{search}")
-    public ResponseEntity<List<SupplierDto>> suppliersSearch(@PathVariable String search) {
+    public ResponseEntity<List<SupplierDto>> suppliersSearch(@PathVariable @NotBlank(message = "Search term cannot be blank") String search) {
         return ResponseEntity.ok(supplierService.searchSuppliers(search));
     }
 }

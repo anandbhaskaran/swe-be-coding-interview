@@ -3,6 +3,7 @@ package com.getourguide.interview.error;
 import com.getourguide.interview.dto.ErrorResponseDto;
 import com.getourguide.interview.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,27 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleConstraintViolationException(
+            ConstraintViolationException e,
+            HttpServletRequest request) {
+        log.error("Validation error: {}", e.getMessage());
+
+        String message = e.getConstraintViolations().stream()
+                .findFirst()
+                .map(cv -> cv.getMessage())
+                .orElse("Validation error");
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(message)
                 .path(request.getRequestURI())
                 .build();
 
