@@ -15,53 +15,32 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
 
     public List<ActivityDto> getActivities() {
-        List<Activity> activities = activityRepository.findAll();
-        List<ActivityDto> result = new ArrayList<>();
-        activities.stream().forEach(activity -> {
-            result.add(ActivityDto.builder()
-                    .id(activity.getId())
-                    .title(activity.getTitle())
-                    .price(activity.getPrice())
-                    .currency(activity.getCurrency())
-                    .rating(activity.getRating())
-                    .specialOffer(activity.isSpecialOffer())
-                    .supplierName(Objects.isNull(activity.getSupplier()) ? "" : activity.getSupplier().getName())
-                    .build());
-        });
-        return result;
+        return activityRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
     public ActivityDto getActivities(Long activityId) {
-        List<Activity> activities = activityRepository.findAll();
-        List<ActivityDto> result = new ArrayList<>();
-        activities.stream().filter(activity -> activityId.equals(activity.getId())).forEach(activity -> {
-            result.add(ActivityDto.builder()
-                .id(activity.getId())
-                .title(activity.getTitle())
-                .price(activity.getPrice())
-                .currency(activity.getCurrency())
-                .rating(activity.getRating())
-                .specialOffer(activity.isSpecialOffer())
-                .supplierName(activity.getSupplier().getName())
-                .build());
-        });
-        return result.get(0);
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Activity not found"));
+        return mapToDto(activity);
     }
 
     public List<ActivityDto> searchActivities(String search) {
-        List<Activity> activities = activityRepository.findAll();
-        List<ActivityDto> result = new ArrayList<>();
-        activities.stream().filter(a -> a.getTitle().contains(search)).forEach(activity -> {
-            result.add(ActivityDto.builder()
+        return activityRepository.findByTitleContaining(search).stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    private ActivityDto mapToDto(Activity activity) {
+        return ActivityDto.builder()
                 .id(activity.getId())
                 .title(activity.getTitle())
                 .price(activity.getPrice())
                 .currency(activity.getCurrency())
                 .rating(activity.getRating())
                 .specialOffer(activity.isSpecialOffer())
-                .supplierName(activity.getSupplier().getName())
-                .build());
-        });
-        return result;
+                .supplierName(Objects.isNull(activity.getSupplier()) ? "" : activity.getSupplier().getName())
+                .build();
     }
 }
