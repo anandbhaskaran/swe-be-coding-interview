@@ -261,7 +261,7 @@ public ResponseEntity<String> handleException(Exception e) {
 
 ---
 
-### 9. Missing DTOs for Supplier Endpoints
+### 9. Missing DTOs for Supplier Endpoints - FIXED
 **Files:**
 - `src/main/java/com/getourguide/interview/controller/SupplierController.java`
 - No SupplierDto exists
@@ -277,6 +277,13 @@ public ResponseEntity<String> handleException(Exception e) {
 - Map entities to DTOs before returning
 
 **Effort:** 2 hours
+
+**FIXED:**
+- Created SupplierDto with all fields (id, name, address, zip, city, country)
+- Updated SupplierService to return `List<SupplierDto>`
+- Added `mapToDto()` private method in SupplierService
+- Updated SupplierController to return DTOs
+- Now consistent with ActivityController pattern
 
 ---
 
